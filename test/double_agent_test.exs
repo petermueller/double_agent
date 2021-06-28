@@ -2,23 +2,25 @@ defmodule DoubleAgentTest do
   use ExUnit.Case
   doctest DoubleAgent
 
-  test "won't attempt to create a mock for a nonexistent module" do
-    # assert_raise(
-    #   ArgumentError,
-    #   "module NonExistent either does not exist or is not loaded",
-    #   fn ->
-    #     DoubleAgent.defmock(MyMock, for: NonExistent)
-    #   end
-    # )
-  end
+  # TODO - reenable once it's converted to some string to be eval'd, so we can do `assert_raise` during runtime, and not compile :'D
+  # @tag pending: true
+  # test "won't attempt to create a mock for a nonexistent module" do
+  # assert_raise(
+  #   ArgumentError,
+  #   "module NonExistent either does not exist or is not loaded",
+  #   fn ->
+  #     DoubleAgent.defmock(MyMock, for: NonExistent)
+  #   end
+  # )
+  # end
 
-  # TODO - enable test stubbing/mocking is implemented
+  # TODO - enable once test stubbing/mocking is implemented
   # @tag pending: true
   # test "can create a mock from a behaviour" do
-  #   assert MyMock = DoubleAgent.defmock(MyMock, for: MyBehaviour)
+  #   assert MyBehavedMock = DoubleAgent.defmock(MyBehavedMock, for: MyBehaviour)
 
   #   # add some stubbing, or something before this
-  #   assert MyMock.hello() == "asdf"
+  #   assert MyBehavedMock.hello() == "asdf"
   # end
 
   test "tracks invocations" do
