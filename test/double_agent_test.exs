@@ -53,6 +53,7 @@ defmodule DoubleAgentTest do
              {:ok, foo1_invokes ++ foo0_invokes}
   end
 
+  @tag :skip
   test "can create a mock from a module" do
     test_pid = self()
 

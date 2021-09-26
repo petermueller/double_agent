@@ -43,4 +43,39 @@ defmodule DoubleAgent do
       end
     end
   end
+
+  defmacro defshim(alias, opts \\ []) do
+    source = Keyword.fetch!(opts, :for)
+
+    env = __CALLER__
+    expanded = Macro.expand(alias, env)
+    source = Macro.expand(source, env)
+
+    unless Code.ensure_compiled(source) == {:module, source} do
+      raise(ArgumentError, "module #{inspect(source)} either does not exist or is not loaded")
+    end
+
+    func_defs =
+      for {func_name, arity} <- source.__info__(:functions) do
+        args = Macro.generate_arguments(arity, source)
+
+        quote do
+          def unquote(func_name)(unquote_splicing(args)) do
+            IO.puts("Hello from #{unquote(func_name)}")
+
+            __handle_shim_call__(
+              {unquote(expanded), unquote(func_name), [unquote_splicing(args)]}
+            )
+          end
+        end
+      end
+
+    quote do
+      defmodule unquote(expanded) do
+        use DoubleAgent.Shim, for: unquote(source)
+
+        unquote(func_defs)
+      end
+    end
+  end
 end
